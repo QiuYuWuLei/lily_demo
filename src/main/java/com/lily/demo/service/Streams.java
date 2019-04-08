@@ -40,7 +40,7 @@ public class Streams {
         map.put("a", "a");
         map.put("f", "f");
         map.put("d", "d");
-        map.put("e", "e");
+        map.put("g", "g");
         String jsonStr = gson.toJson(map);
 
         System.out.printf(jsonStr);
