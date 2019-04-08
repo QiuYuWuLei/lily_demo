@@ -1,0 +1,184 @@
+<WebAPI appName="bizconfig" appId="203" version="1" desc="业务配置服务接口">
+
+    <!-- 阿里云OSS配置 -->
+    <APIDefinition RequestMapping="/bizconfig/oss/aliyunOssInfo">
+        <RequestBody name="PostAliOssConfig">
+            <field name="accessToken"/>
+            <field name="appId"/>  <!-- appId [必填] -->
+        </RequestBody>
+        <ResponseBody name="RetAliOssConfig">
+            <field name="retcode"/>  <!-- 0-成功 -->
+            <field name="retmsg"/>
+            <field name="endpoint"/>
+            <field name="accessKeyId"/>
+            <field name="accessKeySecret"/>
+            <field name="bucketName"/>
+            <field name="bucketDomain"/>  <!-- Bucket 域名 -->
+            <field name="prefix"/>  <!-- 文件前缀 -->
+        </ResponseBody>
+    </APIDefinition>
+
+    <!-- App版本信息 -->
+    <APIDefinition RequestMapping="/bizconfig/app/version" serverMode="noToken">
+        <RequestBody name="PostAppVersion">
+            <field name="appId"/>
+            <field name="terminal"/>  <!-- 1-用户端App 2-商家端 3-司机端 -->
+        </RequestBody>
+        <ResponseBody name="RetAppVersion">
+            <field name="retcode"/>
+            <field name="retmsg"/>
+            <field name="appId"/>
+            <field name="appName"/>
+            <!--
+                ====  版本类型   ====
+                1:可选版本，提示用户更新，用户可选择忽略
+                2:强制版本，强制用户更新
+                3:beta版，无须提示用户
+                ====  示例 	====
+                {"version":"2.11.1","type":"2","packSize":"55M左右（建议wifi下更新）","packPath":"https:xxx","updateLog":"xxx"}
+                {"version":"2.12.1","type":"1","packSize":"55M左右（建议wifi下更新）"}
+                最新版本为2.1.1 强制升级版本
+                最新版本为2.1.2 非强制升级版本
+             -->
+            <map name="iosVer"/>  <!-- iOS版本信息 version type packSize updateLog -->
+            <map name="androidVer"/>  <!-- 安卓版本信息 version type packSize packPath updateLog -->
+        </ResponseBody>
+    </APIDefinition>
+
+
+    <!-- App配置信息 -->
+    <APIDefinition RequestMapping="/bizconfig/sys/appConfig">
+        <RequestBody name="PostAppConfig">
+            <field name="accessToken"/>
+            <field name="appId"/>
+        </RequestBody>
+        <ResponseBody name="RetAppConfig">
+            <field name="retcode"/>
+            <field name="retmsg"/>
+            <field name="appId"/>
+            <field name="appName"/>
+            <field name="appInfo"/>
+            <!--支付key-->
+            <field name="upayKey"/>
+            <!--推送key-->
+            <field name="pushKey"/>
+        </ResponseBody>
+    </APIDefinition>
+
+
+    <!--######################################################################################H5资源配置开始#################################################################################-->
+
+
+    <!--H5资源配置-->
+    <APIModel type="H5Config">
+        <field name="id"/>  <!-- 任务ID [必填] -->
+        <field name="type"/>  <!--类型  banner-H5的banner资源   view-景点资源 [必填]-->
+        <field name="title"/>  <!--标题 [必填]-->
+        <field name="url"/>  <!--链接地址 [必填]-->
+        <field name="imgUrl"/>  <!--图片地址 [必填]-->
+        <field name="cityCode"/>  <!--城市码 [必填]-->
+        <field name="cityName"/>  <!--城市名称 [必填]-->
+        <field name="status"/>  <!--状态  状态 1-启用 2-禁用 3-移除-->
+        <field name="priority"/>  <!--权重-->
+        <field name="description"/> <!-- 描述 [必填] -->
+        <field name="createTime"/>  <!--创建时间 -->
+    </APIModel>
+
+    <!--H5资源的新增编辑-->
+    <APIDefinition RequestMapping="/bizconfig/sys/cuH5Config">
+        <RequestBody name="PostCuH5Config">
+            <field name="accessToken"/>   <!--accessToken [必填]-->
+            <field name="appId"/>   <!--appId [必填]-->
+            <object name="h5Config" ref="H5Config"/>   <!--H5Config 对象-->
+        </RequestBody>
+        <ResponseBody name="RetCuH5Config">
+            <field name="retcode"/>
+            <field name="retmsg"/>
+            <field name="retId"/>   <!--返回的id-->
+        </ResponseBody>
+    </APIDefinition>
+
+    <!--H5资源的启停和删除-->
+    <APIDefinition RequestMapping="/bizconfig/sys/chaStatusH5Config">
+        <RequestBody name="PostChaStatusH5Config">
+            <field name="accessToken"/>  <!--accessToken [必填]-->
+            <field name="appId"/>  <!--appId [必填]-->
+            <field name="ids"/>  <!--用逗号隔开的id [必填]-->
+            <field name="status"/>  <!--状态 1-启用 2-禁用 3-移除 -->
+
+        </RequestBody>
+        <ResponseBody name="RetChaStatusH5Config">
+            <field name="retcode"/>
+            <field name="retmsg"/>
+        </ResponseBody>
+    </APIDefinition>
+
+    <!-- 用户端浏览H5资源列表 -->
+    <APIDefinition RequestMapping="/bizconfig/sys/userListH5Config" serverMode="noToken">
+        <RequestBody name="PostUserListH5Config">
+            <field name="appId"/>  <!-- appId [必填 1]-->
+            <field name="type"/>  <!-- 类型  banner-H5的banner资源   view-景点资源 [可填多个用","隔开 必填]-->
+            <field name="cityCode"/>  <!-- 城市码 [必填]-->
+        </RequestBody>
+        <ResponseBody name="RetUserListH5Config">
+            <field name="retcode"/>  <!-- 0-成功 -->
+            <field name="retmsg"/>
+            <list name="h5Configs" ref="H5Config"/>
+        </ResponseBody>
+    </APIDefinition>
+
+    <!-- 管理端浏览H5资源列表 -->
+    <APIDefinition RequestMapping="/bizconfig/sys/adminListH5Config">
+        <RequestBody name="PostAdminListH5Config">
+            <field name="accessToken"/>  <!--accessToken [必填]-->
+            <field name="appId"/>  <!-- appId [必填 1]-->
+            <field name="type"/>  <!-- 类型 banner-H5的banner资源   view-景点资源 [必填]-->
+            <field name="title"/>  <!-- 标题  模糊查询-->
+            <field name="cityCode"/>  <!-- 城市码 -->
+            <field name="status"/>  <!-- 状态 -->
+            <field name="offset" type="Integer"/>  <!-- 记录偏移量 [默认 0-从第一条开始]-->
+            <field name="limit" type="Integer"/>  <!-- 记录数 [默认20] -->
+        </RequestBody>
+        <ResponseBody name="RetAdminListH5Config">
+            <field name="retcode"/>  <!-- 0-成功 -->
+            <field name="retmsg"/>
+            <field name="count" type="Long"/>  <!-- 总记录数 [offset=0时返回] -->
+            <list name="h5Configs" ref="H5Config"/>
+        </ResponseBody>
+    </APIDefinition>
+
+    <!--######################################################################################H5资源配置结束#################################################################################-->
+
+
+
+    <!--######################################################################################定制路线配置开始#################################################################################-->
+    <!--定制路线-->
+    <APIModel type="Route">
+        <field name="id"/>  <!-- 线路id -->
+        <field name="type"/>  <!-- 专线类型 -->
+        <field name="startPoint"/>  <!--起点 [必填]-->
+        <field name="endPoint"/>  <!--终点 [必填]-->
+        <field name="staAndEndTime"/>  <!--首末班时间-->
+        <field name="cityCode"/>  <!--城市码 [必填]-->
+        <field name="cityName"/>  <!--城市名称 [必填]-->
+        <field name="totalFare" type="Integer"/>  <!--总票价(单位：分) [必填]-->
+        <field name="shiftNum" type="Integer"/>  <!--班次数量-->
+        <field name="status"/>  <!--状态  状态 1-启用 2-禁用 3-移除-->
+        <field name="siteMapStr"/> <!-- 站点map集合的json串 [必填]-->
+        <field name="createTime"/>  <!--创建时间 -->
+    </APIModel>
+
+    <!--######################################################################################定制路线配置结束#################################################################################-->
+    <!-- 上传图片到OSS的工具 [只是接口文件，并未使用此定义的接口]-->
+    <APIDefinition RequestMapping="/bizconfig/util/uploadImgToOss">
+        <RequestBody name="PostUploadImgToOss">
+            <field name="folder"/>  <!-- 上传的oss文件夹 [必填]-->
+            <field name="file"/>  <!-- 上传的文件 [必填]-->
+        </RequestBody>
+        <ResponseBody name="RetUploadImgToOss">
+            <field name="retcode"/>  <!-- 0-成功 -->
+            <field name="retmsg"/>
+            <field name="ossPath"/> <!-- 返回的OSS路径 -->
+        </ResponseBody>
+    </APIDefinition>
+</WebAPI>
