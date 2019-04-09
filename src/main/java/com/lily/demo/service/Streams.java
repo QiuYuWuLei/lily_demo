@@ -1,12 +1,12 @@
 package com.lily.demo.service;
 
+
 import com.google.gson.Gson;
-import com.lily.demo.model.User;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Streams {
     private static Gson gson = new Gson();
@@ -35,7 +35,7 @@ public class Streams {
     }
 
     public static void main(String[] args) {
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("b", "b");
         map.put("a", "a");
         map.put("f", "f");
@@ -66,7 +66,6 @@ public class Streams {
 //        System.out.println(clock.millis());
 //        System.out.println(clock.instant());
 //        System.out.println(LocalDate.now());
-
 
 
     }
