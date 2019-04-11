@@ -1,6 +1,6 @@
 spring:
   mvc:
-    wiew:
+    view:
       prefix: /pages/
 
       suffix: .html
